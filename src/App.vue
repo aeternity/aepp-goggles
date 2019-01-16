@@ -6,20 +6,23 @@
         <div class="search-field">
           <textarea rows="4" v-model="tx" class="search-field__input" @keydown.enter="toggle">
           </textarea>
+          <p v-if="invalidTx" class="error">Invalid input</p>
           <button class="search-field__btn" @click="toggle">verify</button>
         </div>
-        <div class="results" v-show="data">
+        <ae-loader v-if="loading"/>
+        <div v-if="error" class="results" v-show="data">
           <app-panel>
             <app-table>
               <app-table-body>
-                <app-table-row extend>
+                <app-table-row extend v-if="results.signature">
                   <app-table-row-cell extend>
                     <app-definition
                       type="list"
                       title="Signature"
                     >
-                      ...
-                      <p v-if="error.signature" class="error">The signature is unvalid</p>
+                      {{ results.signature }}
+                      <p v-if="error.ErrSignatureVerfication" class="error">The signature cannot be verified, please verify that you used the correct network id and the correct private key for the sender address
+                      </p>
                     </app-definition>
                   </app-table-row-cell>
                 </app-table-row>
@@ -29,7 +32,7 @@
                       type="list"
                       title="Sender account"
                     >
-                      ak_LAqgfAAjAbpt4hhyrAfHyVg9xfVQWsk1kaHaii6fYXt6AJAGe
+                      {{ results.txObject.senderId }}
                     </app-definition>
                   </app-table-row-cell>
                 </app-table-row>
@@ -39,7 +42,7 @@
                       type="list"
                       title="Recipient account"
                     >
-                      ak_Egp9yVdpxmvAfQ7vsXGvpnyfNq71msbdUpkMNYGTeTe8kPL3v
+                      {{ results.txObject.recipientId }}
                     </app-definition>
                   </app-table-row-cell>
                 </app-table-row>
@@ -49,8 +52,8 @@
                       type="list"
                       title="Amount"
                     >
-                      20054054081056290027
-                      <p v-if="error.amount" class="error">The balance is insufficient</p>
+                      {{ results.txObject.amount }}
+                      <p v-if="error.ErrInsufficientBalanceForAmount" class="error">The account balance {{ error.ErrInsufficientBalanceForAmount }} is not enough to execute the transaction</p>
                     </app-definition>
                   </app-table-row-cell>
                 </app-table-row>
@@ -60,8 +63,8 @@
                       type="list"
                       title="Ttl"
                     >
-                      0
-                      <p v-if="error.ttl" class="error">{{ error.ttl }}</p>
+                      {{ results.txObject.ttl }}
+                      <p v-if="error.ErrExpiredTTL" class="error">The TTL is already expired, the current height is {{ error.ErrExpiredTTL }}</p>
                     </app-definition>
                   </app-table-row-cell>
                 </app-table-row>
@@ -71,8 +74,9 @@
                       type="list"
                       title="Fee"
                     >
-                      20000
-                      <p v-if="error.fee" class="error">{{ error.fee }}</p>
+                      {{ results.txObject.fee }}
+                      <p v-if="error.ErrInsufficientFee" class="error">The account balance {{ error.ErrInsufficientFee }} is not enough to execute the transaction</p>
+                      <p v-if="error.ErrInsufficientBalanceForAmountFee" class="error">The fee for the transaction is too low, the minimum fee for this transaction is {{ error.ErrInsufficientBalanceForAmountFee }}</p>
                     </app-definition>
                   </app-table-row-cell>
                 </app-table-row>
@@ -82,8 +86,9 @@
                       type="list"
                       title="Nonce"
                     >
-                      3
-                      <p v-if="error.nonce" class="error">{{ error.nonce }}</p>
+                      {{ results.txObject.nonce }}
+                      <p v-if="error.ErrNonceUsed" class="error">The nonce is technically valid but will not be processed immediately by the node (next valid nonce is {{ error.ErrNonceUsed }})</p>
+                      <p v-if="error.WarnNonceHigh" class="error">The nonce is technically valid but will not be processed immediately by the node (next valid nonce is {{ error.WarnNonceHigh }})</p>
                     </app-definition>
                   </app-table-row-cell>
                 </app-table-row>
@@ -93,7 +98,7 @@
                       type="list"
                       title="Payload"
                     >
-                      ...
+                      {{ results.txObject.payload }}
                     </app-definition>
                   </app-table-row-cell>
                 </app-table-row>
@@ -114,8 +119,9 @@
   import AppTable from './components/appTable'
   import AppTableBody from './components/appTableBody'
   import AppPanel from './components/appPanel'
+  import { AeLoader } from '@aeternity/aepp-components'
 
-  import {TxVerify} from '@aeternity/aepp-sdk'
+  import * as TxVerify from '../aepp-sdk-js-tx-verify/es/tx/deserializer'
 
 export default {
   name: 'app',
@@ -125,25 +131,42 @@ export default {
     AppDefinition,
     AppTable,
     AppTableBody,
-    AppPanel
+    AppPanel,
+    AeLoader
   },
   data: function () {
     return {
       tx: '',
       data: false,
       results: {},
-      error: {},
+      error: undefined,
+      loading: false,
+      invalidTx: false,
       unpackError: ''
     }
   },
   methods: {
     toggle () {
+      this.invalidTx = false;
       try {
+        this.results = {};
+        this.error = undefined;
+        this.loading = true;
         this.results = TxVerify.unpackTx(this.tx);
         TxVerify.verifyTx(this.results)
-                .then(res => this.error = res)
+                .then(res => {
+                  this.loading = false;
+                  this.tx = '';
+                  this.error = Object
+                          .keys(res)
+                          .reduce((acc, el) => {
+                            if(res[el] !== true) acc[el] = res[el];
+                            return acc
+                          }, {})
+                })
       } catch(e) {
-        this.unpackError = e;
+        this.invalidTx = true;
+        this.loading = false;
       }
       this.data = !this.data;
     }
@@ -218,7 +241,7 @@ h1 {
 
     &__btn{
       padding: .5rem;
-      border-radius:1rem;
+      border-radius: 1.2rem;
       font-family: inherit;
       letter-spacing: .02rem;
       border: 1px solid transparent;
@@ -235,4 +258,15 @@ h1 {
   .results {
     margin: 3rem 0;
   }
+
+  .error {
+    color: #E72B6E;
+    font-size: .7rem;
+    font-family: "Inter UI", sans-serif;
+    font-weight: bold;
+    width: 100%;
+    text-align: center;
+    margin-top: 0;
+  }
+
 </style>

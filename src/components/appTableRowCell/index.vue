@@ -22,6 +22,7 @@ export default {
   .app-table-cell {
     display: flex;
     flex-direction: column;
+    height: 100%;
     //padding: .8rem;
     width: 100%;
     @media (min-width: 450px) {

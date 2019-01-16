@@ -1,17 +1,17 @@
 <template>
   <div
-    class="app-definition"
+    class="app-definition-error"
     :class="{
       [type]: Boolean(type)
     }"
   >
     <div
       v-if="title"
-      class="app-definition-title"
+      class="app-definition-error-title"
     >
       {{ title }}
     </div>
-    <div class="app-definition-content">
+    <div class="app-definition-error-content">
       <slot />
     </div>
   </div>
@@ -19,7 +19,7 @@
 
 <script>
 export default {
-  name: 'AppDefinition',
+  name: 'AppDefinitionError',
   props: {
     /**
      * Fill property changes the color state of the button
@@ -44,7 +44,7 @@ export default {
 <style scoped lang="scss">
   @import "~@aeternity/aepp-components-3/src/styles/variables/colors";
   @import "~@aeternity/aepp-components-3/src/styles/placeholders/typography";
-  .app-definition {
+  .app-definition-error {
     display: flex;
     margin: 0;
     flex-direction: column;
@@ -52,33 +52,33 @@ export default {
     width: 100%;
     height: 100%;
   }
-  .app-definition-title {
+  .app-definition-error-title {
     font-weight: 500;
     @extend %face-uppercase-xs;
   }
-  .app-definition-content {
+  .app-definition-error-content {
     color: #76818C;
     display: flex;
     @extend %face-mono-xs;
   }
-  .app-definition.block {
+  .app-definition-error.block {
     padding: .6rem;
   }
-  .app-definition.list {
-    background-color: $color-neutral-positive-3;
+  .app-definition-error.list {
+    background-color: #FFBFD7;
     padding: .6rem;
     @media (min-width: 450px) {
       flex-direction: row;
       padding: 0;
     }
-    & .app-definition-title {
+    & .app-definition-error-title {
       @media (min-width: 450px) {
         text-align: right;
         width: 25%;
         padding: .6rem;
       }
     }
-    & .app-definition-content {
+    & .app-definition-error-content {
       word-break: break-all;
       @media (min-width: 450px) {
         padding: .8rem;
