@@ -103,8 +103,8 @@ async function validateBase (txObject, encodedTx) {
   return {
     ErrInsufficientFee: minFee <= +fee ? true : fee,
     ErrExpiredTTL: +ttl !== 0 ? (height < +ttl ? true : height) : true,
-    ErrInsufficientBalanceForAmountFee: BigNumber(balance).gt(BigNumber(amount).plus(+fee)) ? true : balance,
-    ErrInsufficientBalanceForAmount: BigNumber(balance).gt(BigNumber(amount)) ? true : balance,
+    WarInsufficientBalanceForAmountFee: BigNumber(balance).gt(BigNumber(amount).plus(+fee)) ? true : balance,
+    WarInsufficientBalanceForAmount: BigNumber(balance).gt(BigNumber(amount)) ? true : balance,
     ErrNonceUsed: +accountNonce <= (+nonce) ? true : (+accountNonce + 1),
     WarnNonceHigh: +nonce > (+accountNonce + 1) ? (+accountNonce + 1) : true
   }

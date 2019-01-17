@@ -66,7 +66,7 @@
                       title="Amount"
                     >
                       {{ results.txObject.amount }}
-                      <p v-if="error.ErrInsufficientBalanceForAmount" class="error">The account balance <em>{{ error.ErrInsufficientBalanceForAmount }}</em> is not enough to execute the transaction</p>
+                      <p v-if="error.WarInsufficientBalanceForAmount" class="warning">The account balance <em>{{ error.ErrInsufficientBalanceForAmount }}</em> is not enough to execute the transaction</p>
                     </app-definition>
                   </app-table-row-cell>
                 </app-table-row>
@@ -88,7 +88,7 @@
                       title="Fee"
                     >
                       {{ results.txObject.fee }}
-                      <p v-if="error.ErrInsufficientBalanceForAmountFee" class="error">The account balance <em>{{ error.ErrInsufficientBalanceForAmountFee }}</em> is not enough to execute the transaction</p>
+                      <p v-if="error.WarInsufficientBalanceForAmountFee" class="warning">The account balance <em>{{ error.ErrInsufficientBalanceForAmountFee }}</em> is not enough to execute the transaction</p>
                       <p v-if="error.ErrInsufficientFee" class="error">The fee for the transaction is too low, the minimum fee for this transaction is <em>{{ error.ErrInsufficientFee }}</em></p>
                     </app-definition>
                   </app-table-row-cell>
@@ -315,5 +315,18 @@ h1 {
       text-align: center;
     }
   }
+  .warning {
+      color: #E72B6E;
+      font-size: .7rem;
+      font-family: "Inter UI", sans-serif;
+      background-color: #F7FAFC;
+      font-weight: bold;
+      width: 100%;
+      margin-top: 0;
+      @media (min-width: 450px) {
+          background-color: #fff;
+      }
+  }
+
 
 </style>
