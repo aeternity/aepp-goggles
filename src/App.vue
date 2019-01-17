@@ -13,7 +13,7 @@
           <p v-if="success" class="success">Your transaction looks good! 🤓</p>
           <button class="search-field__btn" @click="toggle" :disabled="loading" :class="{ disabled : loading }">{{ loading ? 'loading...' : 'verify'}}</button>
         </div>
-        <div v-if="error" class="results" v-show="data">
+        <div v-if="error" class="results">
           <app-panel>
             <app-table>
               <app-table-body>
@@ -21,7 +21,7 @@
                   <app-table-row-cell extend>
                     <app-definition
                             type="list"
-                            title="txgs"
+                            title="tx"
                     >
                       {{ results.tx }}
                     </app-definition>
@@ -34,7 +34,7 @@
                       title="Signature"
                     >
                       {{ results.signature }}
-                      <p v-if="error.ErrSignatureVerfication" class="error">The signature cannot be verified, please verify that you used the correct network id and the correct private key for the sender address
+                      <p v-if="!error.ErrSignatureVerfication" class="error">The signature cannot be verified, please verify that you used the correct network id and the correct private key for the sender address
                       </p>
                     </app-definition>
                   </app-table-row-cell>
@@ -183,7 +183,6 @@ export default {
         this.invalidTx = true;
         this.loading = false;
       }
-      this.data = !this.data;
     }
   }
 }
