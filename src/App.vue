@@ -10,6 +10,7 @@
             <ae-loader v-if="loading"/>
           </div>
           <p v-if="invalidTx" class="error error_signature">Invalid input</p>
+          <p v-if="success" class="success">Your transaction looks good! 🤓</p>
           <button class="search-field__btn" @click="toggle" :disabled="loading" :class="{ disabled : loading }">{{ loading ? 'loading...' : 'verify'}}</button>
         </div>
         <div v-if="error" class="results" v-show="data">
@@ -77,8 +78,8 @@
                       title="Fee"
                     >
                       {{ results.txObject.fee }}
-                      <p v-if="error.ErrInsufficientFee" class="error">The account balance <em>{{ error.ErrInsufficientFee }}</em> is not enough to execute the transaction</p>
-                      <p v-if="error.ErrInsufficientBalanceForAmountFee" class="error">The fee for the transaction is too low, the minimum fee for this transaction is <em>{{ error.ErrInsufficientBalanceForAmountFee }}</em></p>
+                      <p v-if="error.ErrInsufficientBalanceForAmountFee" class="error">The account balance <em>{{ error.ErrInsufficientBalanceForAmountFee }}</em> is not enough to execute the transaction</p>
+                      <p v-if="error.ErrInsufficientFee" class="error">The fee for the transaction is too low, the minimum fee for this transaction is <em>{{ error.ErrInsufficientFee }}</em></p>
                     </app-definition>
                   </app-table-row-cell>
                 </app-table-row>
@@ -143,12 +144,14 @@ export default {
       error: undefined,
       loading: false,
       invalidTx: false,
-      unpackError: ''
+      unpackError: '',
+      success: false
     }
   },
   methods: {
     toggle () {
       this.invalidTx = false;
+      this.success = false;
       try {
         this.results = {};
         this.error = undefined;
@@ -164,6 +167,7 @@ export default {
                             if(res[el] !== true) acc[el] = res[el];
                             return acc
                           }, {})
+                  this.success = Object.keys(this.error).length === 0;
                 })
       } catch(e) {
         this.invalidTx = true;
@@ -299,6 +303,7 @@ h1 {
       background-color: transparent;
       margin-top: .5rem;
       margin-bottom: -.5rem;
+      text-align: center;
     }
   }
 
