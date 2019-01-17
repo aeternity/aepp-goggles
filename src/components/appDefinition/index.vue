@@ -79,7 +79,6 @@ export default {
       }
     }
     & .app-definition-content {
-      word-break: break-all;
       @media (min-width: 450px) {
         padding: .8rem;
         background-color: #FFFFFF;

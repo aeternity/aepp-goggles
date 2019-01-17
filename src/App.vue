@@ -4,12 +4,14 @@
       <div class="container__inner input">
         <h1 class="goggles"><span>G</span><span>o</span><span>g</span><span>g</span><span>l</span><span>e</span><span>s</span></h1>
         <div class="search-field">
-          <textarea rows="4" v-model="tx" class="search-field__input" @keydown.enter="toggle">
-          </textarea>
-          <p v-if="invalidTx" class="error">Invalid input</p>
-          <button class="search-field__btn" @click="toggle">verify</button>
+          <div class="search-field__wrapper" :class="{loading: 'is-loading'}">
+            <textarea rows="4" v-model="tx" class="search-field__input" @keydown.enter="toggle">
+            </textarea>
+            <ae-loader v-if="loading"/>
+          </div>
+          <p v-if="invalidTx" class="error error_signature">Invalid input</p>
+          <button class="search-field__btn" @click="toggle" :disabled="loading" :class="{ loading: 'disabled'}">verify</button>
         </div>
-        <ae-loader v-if="loading"/>
         <div v-if="error" class="results" v-show="data">
           <app-panel>
             <app-table>
@@ -53,7 +55,7 @@
                       title="Amount"
                     >
                       {{ results.txObject.amount }}
-                      <p v-if="error.ErrInsufficientBalanceForAmount" class="error">The account balance {{ error.ErrInsufficientBalanceForAmount }} is not enough to execute the transaction</p>
+                      <p v-if="error.ErrInsufficientBalanceForAmount" class="error">The account balance <em>{{ error.ErrInsufficientBalanceForAmount }}</em> is not enough to execute the transaction</p>
                     </app-definition>
                   </app-table-row-cell>
                 </app-table-row>
@@ -64,7 +66,7 @@
                       title="Ttl"
                     >
                       {{ results.txObject.ttl }}
-                      <p v-if="error.ErrExpiredTTL" class="error">The TTL is already expired, the current height is {{ error.ErrExpiredTTL }}</p>
+                      <p v-if="error.ErrExpiredTTL" class="error">The TTL is already expired, the current height is <em>{{ error.ErrExpiredTTL }}</em></p>
                     </app-definition>
                   </app-table-row-cell>
                 </app-table-row>
@@ -75,8 +77,8 @@
                       title="Fee"
                     >
                       {{ results.txObject.fee }}
-                      <p v-if="error.ErrInsufficientFee" class="error">The account balance {{ error.ErrInsufficientFee }} is not enough to execute the transaction</p>
-                      <p v-if="error.ErrInsufficientBalanceForAmountFee" class="error">The fee for the transaction is too low, the minimum fee for this transaction is {{ error.ErrInsufficientBalanceForAmountFee }}</p>
+                      <p v-if="error.ErrInsufficientFee" class="error">The account balance <em>{{ error.ErrInsufficientFee }}</em> is not enough to execute the transaction</p>
+                      <p v-if="error.ErrInsufficientBalanceForAmountFee" class="error">The fee for the transaction is too low, the minimum fee for this transaction is <em>{{ error.ErrInsufficientBalanceForAmountFee }}</em></p>
                     </app-definition>
                   </app-table-row-cell>
                 </app-table-row>
@@ -87,8 +89,8 @@
                       title="Nonce"
                     >
                       {{ results.txObject.nonce }}
-                      <p v-if="error.ErrNonceUsed" class="error">The nonce is technically valid but will not be processed immediately by the node (next valid nonce is {{ error.ErrNonceUsed }})</p>
-                      <p v-if="error.WarnNonceHigh" class="error">The nonce is technically valid but will not be processed immediately by the node (next valid nonce is {{ error.WarnNonceHigh }})</p>
+                      <p v-if="error.ErrNonceUsed" class="error">The nonce is technically valid but will not be processed immediately by the node (next valid nonce is <em>{{ error.ErrNonceUsed }}</em>)</p>
+                      <p v-if="error.WarnNonceHigh" class="error">The nonce is technically valid but will not be processed immediately by the node (next valid nonce is <em>{{ error.WarnNonceHigh }}</em>)</p>
                     </app-definition>
                   </app-table-row-cell>
                 </app-table-row>
@@ -122,7 +124,6 @@
   import { AeLoader } from '@aeternity/aepp-components'
 
   import * as TxVerify from '../aepp-sdk-js-tx-verify/es/tx/deserializer'
-
 export default {
   name: 'app',
   components: {
@@ -152,7 +153,7 @@ export default {
         this.results = {};
         this.error = undefined;
         this.loading = true;
-        this.results = TxVerify.unpackTx(this.tx);
+        this.results = TxVerify.unpackTx(this.tx.trim());
         TxVerify.verifyTx(this.results)
                 .then(res => {
                   this.loading = false;
@@ -233,16 +234,19 @@ h1 {
       padding: .3rem;
       font-family: "IBM Plex Mono", monospace;
       border-radius: .5rem;
-      border: 1px solid transparent;
+      border: 2px solid #EDF3F7;
       background-color: #EDF3F7;
       overflow: hidden;
       -webkit-appearance: none;
+      resize: none;
+      position: relative;
     }
 
     &__btn{
       padding: .5rem;
       border-radius: 1.2rem;
       font-family: inherit;
+      font-size: .8rem;
       letter-spacing: .02rem;
       border: 1px solid transparent;
       background-color: #E72B6E;
@@ -251,10 +255,23 @@ h1 {
       font-weight: 600;
       color: #fff;
       text-transform: uppercase;
+    }
 
+    &__wrapper {
+      position: relative;
+
+      & > .ae-loader {
+        position: absolute;
+        top: 38%;
+        left: 47%;
+        transform: translate(-50%, -50%);
+      }
     }
   }
 
+  .search-field__wrapper.loading > .search-field__input {
+    opacity: .5;
+  }
   .results {
     margin: 3rem 0;
   }
@@ -263,10 +280,16 @@ h1 {
     color: #E72B6E;
     font-size: .7rem;
     font-family: "Inter UI", sans-serif;
+    background-color: #F7FAFC;
     font-weight: bold;
     width: 100%;
-    text-align: center;
     margin-top: 0;
+
+    &_signature {
+      background-color: transparent;
+      margin-top: .5rem;
+      margin-bottom: -.5rem;
+    }
   }
 
 </style>

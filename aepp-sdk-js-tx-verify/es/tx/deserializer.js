@@ -10,6 +10,7 @@ import {
 } from '../utils/crypto'
 import Universal from '../ae/universal'
 import { BigNumber } from 'bignumber.js'
+import * as Encoder from './js'
 
 const url = 'https://sdk-mainnet.aepps.com'
 const internalUrl = 'https://sdk-mainnet.aepps.com'
@@ -60,7 +61,8 @@ export function unpackTx (tx) {
   if (objId.toString() === Buffer.from([11]).toString()) {
     const [objId, vsn, signature, data] = decodedTx
     const rawTx = decode(data)
-    return { txObject: buildTxObject(rawTx), signature, encodedTx: data }
+    debugger
+    return { txObject: buildTxObject(rawTx), signature: Encoder.encode(signature[0], "sg"), encodedTx: data }
   }
   return { txObject: buildTxObject(decodedTx), encodedTx: encode(decodedTx) }
 }
