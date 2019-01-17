@@ -4,13 +4,13 @@
       <div class="container__inner input">
         <h1 class="goggles"><span>G</span><span>o</span><span>g</span><span>g</span><span>l</span><span>e</span><span>s</span></h1>
         <div class="search-field">
-          <div class="search-field__wrapper" :class="{loading: 'is-loading'}">
+          <div class="search-field__wrapper" :class="{ 'is-loading' : loading  }">
             <textarea rows="4" v-model="tx" class="search-field__input" @keydown.enter="toggle">
             </textarea>
             <ae-loader v-if="loading"/>
           </div>
           <p v-if="invalidTx" class="error error_signature">Invalid input</p>
-          <button class="search-field__btn" @click="toggle" :disabled="loading" :class="{ loading: 'disabled'}">verify</button>
+          <button class="search-field__btn" @click="toggle" :disabled="loading" :class="{ disabled : loading }">{{ loading ? 'loading...' : 'verify'}}</button>
         </div>
         <div v-if="error" class="results" v-show="data">
           <app-panel>
@@ -255,10 +255,17 @@ h1 {
       font-weight: 600;
       color: #fff;
       text-transform: uppercase;
+      &.disabled {
+        //opacity: .7;
+        border: 2px solid #E72B6E;
+        background-color: #fff;
+        color: #E72B6E;
+      }
     }
 
     &__wrapper {
       position: relative;
+      width: 100%;
 
       & > .ae-loader {
         position: absolute;
@@ -269,8 +276,8 @@ h1 {
     }
   }
 
-  .search-field__wrapper.loading > .search-field__input {
-    opacity: .5;
+  .search-field__wrapper.is-loading > .search-field__input {
+    opacity: .3;
   }
   .results {
     margin: 3rem 0;
@@ -284,6 +291,9 @@ h1 {
     font-weight: bold;
     width: 100%;
     margin-top: 0;
+    @media (min-width: 450px) {
+      background-color: #fff;
+    }
 
     &_signature {
       background-color: transparent;

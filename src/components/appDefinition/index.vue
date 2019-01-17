@@ -59,6 +59,7 @@ export default {
   .app-definition-content {
     color: #76818C;
     display: flex;
+    flex-direction: column;
     @extend %face-mono-xs;
   }
   .app-definition.block {

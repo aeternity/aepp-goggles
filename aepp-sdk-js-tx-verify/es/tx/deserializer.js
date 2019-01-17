@@ -15,6 +15,8 @@ import * as Encoder from './js'
 const url = 'https://sdk-mainnet.aepps.com'
 const internalUrl = 'https://sdk-mainnet.aepps.com'
 const NETWORK_ID = 'ae_mainnet'
+let epoch
+Universal({ url, internalUrl }).then(client => epoch = client)
 
 const FIELD_TYPES = {
   int: 'int',
@@ -61,8 +63,7 @@ export function unpackTx (tx) {
   if (objId.toString() === Buffer.from([11]).toString()) {
     const [objId, vsn, signature, data] = decodedTx
     const rawTx = decode(data)
-    debugger
-    return { txObject: buildTxObject(rawTx), signature: Encoder.encode(signature[0], "sg"), encodedTx: data }
+    return { txObject: buildTxObject(rawTx), signature: Encoder.encode(signature[0], "sg"), rawSignature: signature, encodedTx: data }
   }
   return { txObject: buildTxObject(decodedTx), encodedTx: encode(decodedTx) }
 }
@@ -74,10 +75,10 @@ function buildTxObject (rawTx) {
   }, {})
 }
 
-export async function verifyTx ({ txObject, signature, encodedTx }) {
-  return signature
+export async function verifyTx ({ txObject, rawSignature, encodedTx }) {
+  return rawSignature
     ? {
-      ErrSignatureVerfication: validateSignature(encodedTx, signature[0], txObject.senderId),
+      ErrSignatureVerfication: validateSignature(encodedTx, rawSignature[0], txObject.senderId),
       ...(await validateBase(txObject, encodedTx))
     }
     : validateBase(txObject, encodedTx)
@@ -92,7 +93,6 @@ function validateSignature (data, sig, pub, networkId = NETWORK_ID) {
 }
 
 async function validateBase (txObject, encodedTx) {
-  const epoch = await Universal({ url, internalUrl })
   const { ttl, nonce, amount, fee, senderId: accountId } = txObject
 
   const minFee = 15000 + 20 * (encodedTx.length - 2) // -2 is 2 bytes for 20000 fee
