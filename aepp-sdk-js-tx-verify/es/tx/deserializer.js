@@ -63,9 +63,9 @@ export function unpackTx (tx) {
   if (objId.toString() === Buffer.from([11]).toString()) {
     const [objId, vsn, signature, data] = decodedTx
     const rawTx = decode(data)
-    return { txObject: buildTxObject(rawTx), signature: Encoder.encode(signature[0], "sg"), rawSignature: signature, encodedTx: data }
+    return { tx, txObject: buildTxObject(rawTx), signature: Encoder.encode(signature[0], "sg"), rawSignature: signature, encodedTx: data }
   }
-  return { txObject: buildTxObject(decodedTx), encodedTx: encode(decodedTx) }
+  return { tx, txObject: buildTxObject(decodedTx), encodedTx: encode(decodedTx) }
 }
 
 function buildTxObject (rawTx) {

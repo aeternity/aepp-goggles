@@ -16,6 +16,16 @@
           <app-panel>
             <app-table>
               <app-table-body>
+                <app-table-row extend v-if="results.tx">
+                  <app-table-row-cell extend>
+                    <app-definition
+                            type="list"
+                            title="txgs"
+                    >
+                      {{ results.tx }}
+                    </app-definition>
+                  </app-table-row-cell>
+                </app-table-row>
                 <app-table-row extend v-if="results.signature">
                   <app-table-row-cell extend>
                     <app-definition
