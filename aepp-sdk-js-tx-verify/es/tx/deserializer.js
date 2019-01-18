@@ -101,7 +101,7 @@ async function validateBase (txObject, encodedTx) {
   const { nonce: accountNonce } = await epoch.api.getAccountByPubkey(accountId)
 
   return {
-    ErrInsufficientFee: minFee <= +fee ? true : fee,
+    ErrInsufficientFee: minFee <= +fee ? true : minFee,
     ErrExpiredTTL: +ttl !== 0 ? (height < +ttl ? true : height) : true,
     WarnInsufficientBalanceForAmountFee: BigNumber(balance).gt(BigNumber(amount).plus(+fee)) ? true : balance,
     WarnInsufficientBalanceForAmount: BigNumber(balance).gt(BigNumber(amount)) ? true : balance,
