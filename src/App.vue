@@ -316,13 +316,14 @@ h1 {
     }
   }
   .warning {
-      color: #231df3;
+      color: #5F4191;
       font-size: .7rem;
       font-family: "Inter UI", sans-serif;
       background-color: #F7FAFC;
       font-weight: bold;
       width: 100%;
       margin-top: 0;
+      opacity: .8;
       @media (min-width: 450px) {
           background-color: #fff;
       }
