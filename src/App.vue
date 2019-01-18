@@ -66,7 +66,7 @@
                       title="Amount"
                     >
                       {{ results.txObject.amount }}
-                      <p v-if="error.WarInsufficientBalanceForAmount" class="warning">The account balance <em>{{ error.ErrInsufficientBalanceForAmount }}</em> is not enough to execute the transaction</p>
+                      <p v-if="error.WarnInsufficientBalanceForAmount" class="warning">The account balance <em>{{ error.WarnInsufficientBalanceForAmount }}</em> is not enough to execute the transaction</p>
                     </app-definition>
                   </app-table-row-cell>
                 </app-table-row>
@@ -88,7 +88,7 @@
                       title="Fee"
                     >
                       {{ results.txObject.fee }}
-                      <p v-if="error.WarInsufficientBalanceForAmountFee" class="warning">The account balance <em>{{ error.ErrInsufficientBalanceForAmountFee }}</em> is not enough to execute the transaction</p>
+                      <p v-if="error.WarnInsufficientBalanceForAmountFee" class="warning">The account balance <em>{{ error.WarnInsufficientBalanceForAmountFee }}</em> is not enough to execute the transaction</p>
                       <p v-if="error.ErrInsufficientFee" class="error">The fee for the transaction is too low, the minimum fee for this transaction is <em>{{ error.ErrInsufficientFee }}</em></p>
                     </app-definition>
                   </app-table-row-cell>
@@ -101,7 +101,7 @@
                     >
                       {{ results.txObject.nonce }}
                       <p v-if="error.ErrNonceUsed" class="error">The nonce is technically valid but will not be processed immediately by the node (next valid nonce is <em>{{ error.ErrNonceUsed }}</em>)</p>
-                      <p v-if="error.WarnNonceHigh" class="error">The nonce is technically valid but will not be processed immediately by the node (next valid nonce is <em>{{ error.WarnNonceHigh }}</em>)</p>
+                      <p v-if="error.WarnNonceHigh" class="warning">The nonce is technically valid but will not be processed immediately by the node (next valid nonce is <em>{{ error.WarnNonceHigh }}</em>)</p>
                     </app-definition>
                   </app-table-row-cell>
                 </app-table-row>
@@ -316,7 +316,7 @@ h1 {
     }
   }
   .warning {
-      color: #E72B6E;
+      color: #231df3;
       font-size: .7rem;
       font-family: "Inter UI", sans-serif;
       background-color: #F7FAFC;
@@ -327,6 +327,11 @@ h1 {
           background-color: #fff;
       }
   }
+
+
+ .app-definition-content {
+     word-break: break-word;
+ }
 
 
 </style>
