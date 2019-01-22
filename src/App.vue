@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <div class="container">
+      <sup class="label">Prototype</sup>
       <div class="container__inner input">
         <h1 class="goggles"><span>G</span><span>o</span><span>g</span><span>g</span><span>l</span><span>e</span><span>s</span></h1>
         <div class="search-field">
@@ -202,6 +203,7 @@ h1 {
   font-size: 4rem;
 }
 .goggles {
+  position: relative;
   & span:nth-child(1) {
     color: #5F4191;
   }
@@ -224,6 +226,23 @@ h1 {
     color: #14CCB7;
   }
 }
+  .label {
+    color: #5F4191;
+    font-size: .8rem;
+    font-weight: 600;
+    position: fixed;
+    text-transform: uppercase;
+    top: 1rem;
+    right: 1rem;
+    margin-left: .5rem;
+    color: #fff;
+    background-color: #000;
+    padding: .8rem;
+    border-radius: .3rem;
+  }
+
+
+
   .container {
     display: flex;
     flex-direction: column;
