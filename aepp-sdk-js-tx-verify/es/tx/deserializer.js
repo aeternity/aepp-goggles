@@ -89,7 +89,8 @@ export async function verifyTx ({ txObject, rawSignature, encodedTx }) {
 // Verify signature
 function validateSignature (data, sig, pub, networkId = NETWORK_ID) {
   const txWithNetworkId = Buffer.concat([Buffer.from(networkId), data])
-  return verify(txWithNetworkId, sig, decodeBase58Check(assertedType(pub, 'ak')))
+  const isValid = verify(txWithNetworkId, sig, decodeBase58Check(assertedType(pub, 'ak'))) ? true : "signature error"
+  return isValid
 }
 
 async function validateBase (txObject, encodedTx) {

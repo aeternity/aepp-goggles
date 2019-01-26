@@ -239,12 +239,11 @@ function pascalizeParameters (parameters) {
  */
 const traverseKeys = R.curry((fn, o) => {
   const dispatch = {
-    //Object: o => R.fromPairs(R.toPairs(o).map(([k, v]) => [fn(k), traverseKeys(fn, v)])),
     Object: o => R.fromPairs(R.toPairs(o).map(function (arr) {
       const k = arr[0]
       const v = arr[1]
       return [fn(k), traverseKeys(fn, v)]
-    } )),
+    })),
     Array: o => o.map(traverseKeys(fn))
   }
   return (dispatch[R.type(o)] || R.identity)(o)

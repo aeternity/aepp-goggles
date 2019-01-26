@@ -35,7 +35,7 @@
                       title="Signature"
                     >
                       {{ results.signature }}
-                      <p v-if="!error.ErrSignatureVerfication" class="error">The signature cannot be verified, please verify that you used the correct network id and the correct private key for the sender address
+                      <p v-if="error.ErrSignatureVerfication" class="error">The signature cannot be verified, please verify that you used the correct network id and the correct private key for the sender address
                       </p>
                     </app-definition>
                   </app-table-row-cell>
