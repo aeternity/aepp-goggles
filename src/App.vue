@@ -32,7 +32,7 @@
                                 id="goggles"
                                 class="search-field__input"
                                 @keydown.enter="validate"
-                                placeholder="tx_+LsLAfhCuEByfG/wPQ1EEuGRHQ/...">
+                                placeholder="tx_+LsLAfhCuEByfG/wPQ1EEuGRHQ/EsiW3ZCWKWKo07eYfr7Gwtsp+J6cW6ra9RzB4Rrh+RTgZH25SfbFBDDNIyA8zJDiCgoEFuHP4cQwBoQErhur1eJn/RBV05rwez1XXy/p0Zlghrxdc1gWlCHrKrqEBHxOjsIvwAUAGYqaLadh194A87EwIZH9u1dhMeJe9UKOJAaEVcvQZvTTrggPogkZQggu4l3lvdSBzaGFsbCBub3QgcGFzcyDwn5ikw1XokQ==">
                         </textarea>
                         <ae-loader v-if="loading"/>
                     </div>
@@ -150,6 +150,15 @@
             </div>
 
         </div>
+            <footer>
+                <a href="https://aeternity.com/" target="_blank">
+                    <ae-logo/>
+                </a>
+                <a href="https://migrate.aeternity.com/#/legal">
+                    Imprint
+                </a>
+                <small></small>
+            </footer>
         </div>
     </div>
 </template>
@@ -161,6 +170,7 @@
     import AppTable from './components/appTable'
     import AppTableBody from './components/appTableBody'
     import AppPanel from './components/appPanel'
+    import AeLogo from './components/aeLogo'
     import {AeLoader} from '@aeternity/aepp-components'
 
     import TxValidator from '@aeternity/aepp-sdk/es/tx/validator'
@@ -180,7 +190,8 @@
             AppTable,
             AppTableBody,
             AppPanel,
-            AeLoader
+            AeLoader,
+            AeLogo
         },
         data: function () {
             return {
@@ -239,7 +250,6 @@
                         .then(({ error, warning }) => {
                             this.loading = false;
                             this.clearInput();
-
                             this.error = error;
                             this.warning = warning;
                             this.success = Object.keys(this.error).length === 0 && Object.keys(this.warning).length === 0;
@@ -464,5 +474,20 @@
         word-break: break-word;
     }
 
-
+    footer {
+        display: flex;
+        width: 90%;
+        max-width: 40em;
+        margin: auto;
+        justify-content: space-between;
+        .ae-logo {
+            font-size: 1rem;
+            scale: .5;
+        }
+        & a {
+            font-size: .8rem;
+            color: $color-neutral-minimum;
+            display: inline-block;
+        }
+    }
 </style>
