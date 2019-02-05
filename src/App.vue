@@ -1,19 +1,44 @@
 <template>
     <div id="app">
-        <div class="container">
-            <sup class="label">Prototype</sup>
+        <div v-if="!$data">
+            <svg width="422px" height="308px" viewBox="0 0 422 308" version="1.1" xmlns="http://www.w3.org/2000/svg" >
+                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                    <g transform="translate(15.000000, 15.000000)" stroke="#001833" stroke-width="30">
+                        <circle id="Oval-Copy-3" cx="99.5" cy="212.5" r="65.5"></circle>
+                        <path d="M234.271036,181.67472 C223.67946,174.314346 210.811899,170 196.936668,170 C182.353927,170 168.884239,174.765547 158,182.824247" id="Oval-Copy-4"></path>
+                        <circle id="Oval-Copy-5" cx="292.5" cy="212.5" r="65.5"></circle>
+                        <path d="M358,189.5 L391.5,189.5" id="Line-Copy-2" stroke-linecap="round"></path>
+                        <path d="M0,189.5 L33.5,189.5" id="Line-Copy-3" stroke-linecap="round"></path>
+                        <path d="M391.164064,189.311856 C357.681082,112.482048 334.320523,56.8103484 321.082386,22.2967572 C307.844249,-12.216834 287.816787,-6.66222265 261,38.9605914" id="Path-Copy-2" stroke-linecap="round"></path>
+                        <path d="M130.164064,189.311856 C96.6810824,112.482048 73.3205231,56.8103484 60.0823859,22.2967572 C46.8442488,-12.216834 26.8167868,-6.66222265 0,38.9605914" id="Path-Copy-3" stroke-linecap="round" transform="translate(65.082032, 94.655928) scale(-1, 1) translate(-65.082032, -94.655928) "></path>
+                    </g>
+                </g>
+            </svg>
+        </div>
+        <div v-cloak>
+            <div class="container">
+            <div class="version-tag">Prototype</div>
             <div class="container__inner input">
                 <h1 class="goggles"><span>G</span><span>o</span><span>g</span><span>g</span><span>l</span><span>e</span><span>s</span>
                 </h1>
                 <div class="search-field">
+                    <label for="goggles" class="search-field__label">
+                        💡 paste in transaction below to verify it's validity
+                    </label>
                     <div class="search-field__wrapper" :class="{ 'is-loading' : loading  }">
-            <textarea rows="4" v-model="tx" class="search-field__input" @keydown.enter="toggle">
-            </textarea>
+                        <textarea
+                                rows="5"
+                                v-model="tx"
+                                id="goggles"
+                                class="search-field__input"
+                                @keydown.enter="validate"
+                                placeholder="tx_+LsLAfhCuEByfG/wPQ1EEuGRHQ/...">
+                        </textarea>
                         <ae-loader v-if="loading"/>
                     </div>
                     <p v-if="invalidTx" class="error error_signature">Invalid input</p>
                     <p v-if="success" class="success">Your transaction looks good! 🤓</p>
-                    <button class="search-field__btn" @click="toggle" :disabled="loading"
+                    <button class="search-field__btn" @click="validate" :disabled="loading"
                             :class="{ disabled : loading }">{{ loading ? 'loading...' : 'verify'}}
                     </button>
                 </div>
@@ -125,6 +150,7 @@
             </div>
 
         </div>
+        </div>
     </div>
 </template>
 
@@ -183,10 +209,10 @@
                 this.error = {};
                 this.warning = {};
             },
-            onError(e) {
+            onError() {
                 this.invalidTx = true;
                 this.loading = false;
-                console.error(e);
+                //console.error(e);
             },
             clearInput() {
                 this.tx = '';
@@ -200,7 +226,7 @@
                     this.results.txObject = tx.encodedTx.tx;
                 }
             },
-            toggle() {
+            validate() {
                 this.clear();
                 this.loading = true;
                 try {
@@ -227,12 +253,28 @@
 </script>
 
 <style lang="scss">
-    @import './styles/index';
+    @import "~@aeternity/aepp-components-3/src/styles/variables/colors";
+    @import "~@aeternity/aepp-components-3/src/styles/placeholders/typography";
+    html {
+        @extend %face-sans-base;
+        font-size: 18px;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-rendering: optimizeLegibility;
+        box-sizing: border-box;
+        caret-color: $color-primary;
+    }
+    *, *:before, *:after {
+        box-sizing: inherit;
+    }
 
     body {
         color: #001833;
+        margin:0;
     }
-
+    [v-cloak] {
+        display:none
+    }
     ul, li {
         list-style: none;
     }
@@ -275,14 +317,17 @@
         }
     }
 
-    .label {
-        color: #5F4191;
+    .version-tag {
+        color: #fff;
         font-size: .8rem;
         font-weight: 600;
+        line-height: 0;
         position: fixed;
         text-transform: uppercase;
         top: 1rem;
         right: 1rem;
+        margin: 0;
+        padding: 0;
         margin-left: .5rem;
         color: #fff;
         background-color: #000;
@@ -307,21 +352,36 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-
+        &__label {
+            @extend %face-uppercase-xs;
+            color: $color-neutral;
+            margin: 1.5rem 0;
+        }
         &__input {
             width: 100%;
-            font-size: inherit;
+            display: block;
+            font-size: .9rem;
             padding: .3rem;
             font-family: "IBM Plex Mono", monospace;
-            border-radius: .5rem;
-            border: 2px solid #EDF3F7;
-            background-color: #EDF3F7;
-            overflow: hidden;
+            border: 2px solid $color-neutral-positive-2;
+            background-color: $color-neutral-positive-2;
             -webkit-appearance: none;
             resize: none;
             position: relative;
+            border-radius: .5rem;
+            overflow: hidden;
+            word-break: break-all;
+            cursor: url('assets/goggles_cursor.png'), auto;
+            &:focus {
+                outline: none;
+                border-radius: .5rem;
+                border: 2px solid $color-neutral-positive-1;
+            }
+            &::placeholder {
+                //font-size: .8rem;
+                opacity: .5;
+            }
         }
-
         &__btn {
             padding: .5rem;
             border-radius: 1.2rem;
