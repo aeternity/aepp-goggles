@@ -60,6 +60,7 @@ export default {
     color: #76818C;
     display: flex;
     flex-direction: column;
+    min-height: 1em;
     @extend %face-mono-xs;
   }
   .app-definition.block {
