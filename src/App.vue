@@ -42,7 +42,7 @@
                                         </app-definition>
                                     </app-table-row-cell>
                                 </app-table-row>
-                                <app-table-row extend>
+                                <app-table-row extend v-if="results.txObject.senderId">
                                     <app-table-row-cell extend>
                                         <app-definition
                                                 type="list"
@@ -52,13 +52,53 @@
                                         </app-definition>
                                     </app-table-row-cell>
                                 </app-table-row>
-                                <app-table-row extend>
+                                <app-table-row extend v-if="results.txObject.recipientId">
                                     <app-table-row-cell extend>
                                         <app-definition
                                                 type="list"
                                                 title="Recipient account"
                                         >
                                             {{ results.txObject.recipientId }}
+                                        </app-definition>
+                                    </app-table-row-cell>
+                                </app-table-row>
+                                <app-table-row extend v-if="results.txObject.ownerId">
+                                    <app-table-row-cell extend>
+                                        <app-definition
+                                                type="list"
+                                                title="Owner account"
+                                        >
+                                            {{ results.txObject.ownerId }}
+                                        </app-definition>
+                                    </app-table-row-cell>
+                                </app-table-row>
+                                <app-table-row extend v-if="results.txObject.callerId">
+                                    <app-table-row-cell extend>
+                                        <app-definition
+                                                type="list"
+                                                title="Caller account"
+                                        >
+                                            {{ results.txObject.callerId }}
+                                        </app-definition>
+                                    </app-table-row-cell>
+                                </app-table-row>
+                                <app-table-row extend v-if="results.txObject.accountId">
+                                    <app-table-row-cell extend>
+                                        <app-definition
+                                                type="list"
+                                                title="Owner account"
+                                        >
+                                            {{ results.txObject.accountId }}
+                                        </app-definition>
+                                    </app-table-row-cell>
+                                </app-table-row>
+                                <app-table-row extend v-if="results.txObject.oracleId">
+                                    <app-table-row-cell extend>
+                                        <app-definition
+                                                type="list"
+                                                title="Oracle account"
+                                        >
+                                            {{ results.txObject.oracleId }}
                                         </app-definition>
                                     </app-table-row-cell>
                                 </app-table-row>
