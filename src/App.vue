@@ -51,12 +51,13 @@
 <script>
     import AeLogo from './components/aeLogo'
     import GogglesLogo from "./components/gogglesLogo";
+    import GogglesResults from "./components/gogglesResults";
     import {AeLoader} from '@aeternity/aepp-components'
 
     import TxValidator from '@aeternity/aepp-sdk/es/tx/validator'
     import * as TxBuilder from '@aeternity/aepp-sdk/es/tx/builder'
     import * as TxHelper from '@aeternity/aepp-sdk/es/tx/builder/helpers'
-    import GogglesResults from "./GogglesResults";
+
 
 
     const NODE_URL = 'https://sdk-mainnet.aepps.com';
