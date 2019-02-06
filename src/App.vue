@@ -1,29 +1,12 @@
 <template>
     <div id="app">
-        <div v-if="!$data">
-            <svg width="422px" height="308px" viewBox="0 0 422 308" version="1.1" xmlns="http://www.w3.org/2000/svg" >
-                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                    <g transform="translate(15.000000, 15.000000)" stroke="#001833" stroke-width="30">
-                        <circle id="Oval-Copy-3" cx="99.5" cy="212.5" r="65.5"></circle>
-                        <path d="M234.271036,181.67472 C223.67946,174.314346 210.811899,170 196.936668,170 C182.353927,170 168.884239,174.765547 158,182.824247" id="Oval-Copy-4"></path>
-                        <circle id="Oval-Copy-5" cx="292.5" cy="212.5" r="65.5"></circle>
-                        <path d="M358,189.5 L391.5,189.5" id="Line-Copy-2" stroke-linecap="round"></path>
-                        <path d="M0,189.5 L33.5,189.5" id="Line-Copy-3" stroke-linecap="round"></path>
-                        <path d="M391.164064,189.311856 C357.681082,112.482048 334.320523,56.8103484 321.082386,22.2967572 C307.844249,-12.216834 287.816787,-6.66222265 261,38.9605914" id="Path-Copy-2" stroke-linecap="round"></path>
-                        <path d="M130.164064,189.311856 C96.6810824,112.482048 73.3205231,56.8103484 60.0823859,22.2967572 C46.8442488,-12.216834 26.8167868,-6.66222265 0,38.9605914" id="Path-Copy-3" stroke-linecap="round" transform="translate(65.082032, 94.655928) scale(-1, 1) translate(-65.082032, -94.655928) "></path>
-                    </g>
-                </g>
-            </svg>
-        </div>
-        <div v-cloak>
             <div class="container">
-            <div class="version-tag">Prototype</div>
+            <div class="version-tag">Beta</div>
             <div class="container__inner input">
-                <h1 class="goggles"><span>G</span><span>o</span><span>g</span><span>g</span><span>l</span><span>e</span><span>s</span>
-                </h1>
+                <gogglesLogo/>
                 <div class="search-field">
                     <label for="goggles" class="search-field__label">
-                        💡 paste in transaction below to verify it's validity
+                        💡 paste in transaction below to verify its validity
                     </label>
                     <div class="search-field__wrapper" :class="{ 'is-loading' : loading  }">
                         <textarea
@@ -150,16 +133,20 @@
             </div>
 
         </div>
-            <footer>
+        <footer class="footer">
+            <a href="https://aeternity.com/" target="_blank">
+                <ae-logo/>
+            </a>
+            <div class="footer-container">
                 <a href="https://aeternity.com/" target="_blank">
-                    <ae-logo/>
+                    aeternity.com
                 </a>
-                <a href="https://migrate.aeternity.com/#/legal">
+                <a href="https://migrate.aeternity.com/#/legal" target="_blank">
                     Imprint
                 </a>
-                <small></small>
-            </footer>
-        </div>
+            </div>
+            <small></small>
+        </footer>
     </div>
 </template>
 
@@ -171,11 +158,13 @@
     import AppTableBody from './components/appTableBody'
     import AppPanel from './components/appPanel'
     import AeLogo from './components/aeLogo'
+    import GogglesLogo from "./components/gogglesLogo";
     import {AeLoader} from '@aeternity/aepp-components'
 
     import TxValidator from '@aeternity/aepp-sdk/es/tx/validator'
     import * as TxBuilder from '@aeternity/aepp-sdk/es/tx/builder'
     import * as TxHelper from '@aeternity/aepp-sdk/es/tx/builder/helpers'
+
 
     const NODE_URL = 'https://sdk-mainnet.aepps.com';
     const NODE_INTERNAL_URL = 'https://sdk-mainnet.aepps.com';
@@ -184,6 +173,7 @@
     export default {
         name: 'app',
         components: {
+            GogglesLogo,
             AppTableRow,
             AppTableRowCell,
             AppDefinition,
@@ -295,44 +285,12 @@
         font-size: 4rem;
     }
 
-    .goggles {
-        position: relative;
-
-        & span:nth-child(1) {
-            color: #5F4191;
-        }
-
-        & span:nth-child(2) {
-            color: #E72B6E;
-        }
-
-        & span:nth-child(3) {
-            color: #5F4191;
-        }
-
-        & span:nth-child(4) {
-            color: #5F4191;
-        }
-
-        & span:nth-child(5) {
-            color: #14CCB7;
-        }
-
-        & span:nth-child(6) {
-            color: #E72B6E;
-        }
-
-        & span:nth-child(7) {
-            color: #14CCB7;
-        }
-    }
-
     .version-tag {
         color: #fff;
         font-size: .8rem;
         font-weight: 600;
         line-height: 0;
-        position: fixed;
+        position: absolute;
         text-transform: uppercase;
         top: 1rem;
         right: 1rem;
@@ -349,12 +307,13 @@
     .container {
         display: flex;
         flex-direction: column;
-        min-height: 100vh;
+        min-height: 90vh;
 
         &__inner {
             width: 90%;
             max-width: 40em;
-            margin: auto
+            margin: auto;
+            padding: 25% 0;
         }
     }
 
@@ -364,8 +323,9 @@
         align-items: center;
         &__label {
             @extend %face-uppercase-xs;
-            color: $color-neutral;
+            color: $color-neutral-negative-1;
             margin: 1.5rem 0;
+            text-align: center;
         }
         &__input {
             width: 100%;
@@ -405,6 +365,7 @@
             font-weight: 600;
             color: #fff;
             text-transform: uppercase;
+            cursor: url('assets/goggles_cursor_w.png'), pointer;
 
             &.disabled {
                 //opacity: .7;
@@ -474,20 +435,27 @@
         word-break: break-word;
     }
 
-    footer {
+    .footer {
         display: flex;
-        width: 90%;
-        max-width: 40em;
-        margin: auto;
-        justify-content: space-between;
-        .ae-logo {
-            font-size: 1rem;
-            scale: .5;
-        }
-        & a {
-            font-size: .8rem;
-            color: $color-neutral-minimum;
-            display: inline-block;
+        //width: 90%;
+        margin: 1.5rem;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        font-size: .8rem;
+        &-container {
+            display: flex;
+            margin: .3rem 0;
+            & a {
+                //font-size: .8rem;
+                color: $color-neutral-minimum;
+                display: inline-block;
+                text-decoration: none;
+                text-align: center;
+                &:first-child {
+                    margin-right: 1rem;
+                }
+            }
         }
     }
 </style>

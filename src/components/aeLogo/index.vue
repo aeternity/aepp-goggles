@@ -1,5 +1,5 @@
 <template>
-    <svg width="48" height="23" viewBox="0 0 48 23" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <svg class="ae-logo" width="48" height="23" viewBox="0 0 48 23" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
         <title>aeternity logo</title>
         <g id="Token-Migration" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
             <g id="00.0-Landing-Copy-8" transform="translate(-80.000000, -5535.000000)" fill="#FF0D6A">
@@ -19,3 +19,8 @@
     }
 
 </script>
+<style scoped>
+    .ae-logo {
+        width: 3em;
+    }
+</style>
