@@ -2,13 +2,13 @@
     <app-panel>
         <app-table>
             <app-table-body>
-                <app-table-row extend v-if="results.txType">
+                <app-table-row extend>
                     <app-table-row-cell extend>
                         <app-definition
                                 type="list"
                                 title="tx type"
                         >
-                            {{ results.txType }}
+                            {{ data.txType }}
                         </app-definition>
                     </app-table-row-cell>
                 </app-table-row>
@@ -18,22 +18,22 @@
                                 type="list"
                                 title="tx"
                         >
-                            {{ results.tx }}
+                            {{ data.txHash }}
                         </app-definition>
                     </app-table-row-cell>
                 </app-table-row>
-                <app-table-row extend >
+                <app-table-row extend v-if="data.signature">
                     <app-table-row-cell extend>
                         <app-definition
                                 type="list"
                                 title="Signature"
                         >
-                            {{ results.signature }}
-                            <p v-if="error.InvalidSignature" class="error">{{ error.InvalidSignature }}</p>
+                            {{ data.signature.hash }}
+                            <p v-if="data.signature.error" class="error">{{ data.signature.error }}</p>
                         </app-definition>
                     </app-table-row-cell>
                 </app-table-row>
-                <app-table-row extend v-for="(result) in results.txObject" :key="result.id">
+                <app-table-row extend v-for="(result) in data.txObject" :key="result.id">
                     <app-table-row-cell extend>
                         <app-definition
                                 type="list"
@@ -61,8 +61,7 @@
         name: 'gogglesResults',
         components: {AppDefinition, AppPanel, AppTable, AppTableBody, AppTableRow, AppTableRowCell},
         props: {
-            error: {},
-            results: {}
+            data: {}
         }
     }
 </script>

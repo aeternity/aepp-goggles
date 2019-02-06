@@ -1,6 +1,6 @@
 <template>
     <div id="app">
-            <div class="container">
+        <div class="container">
             <div class="version-tag">Beta</div>
             <div class="container__inner input">
                 <gogglesLogo/>
@@ -25,8 +25,8 @@
                             :class="{ disabled : loading }">{{ loading ? 'loading...' : 'verify'}}
                     </button>
                 </div>
-                <div v-if="error" class="results">
-                    <gogglesResults :error="error" :results="results"/>
+                <div v-if="results" class="results">
+                    <gogglesResults :data="results"/>
                 </div>
             </div>
 
@@ -55,9 +55,6 @@
     import {AeLoader} from '@aeternity/aepp-components'
 
     import TxValidator from '@aeternity/aepp-sdk/es/tx/validator'
-    import * as TxBuilder from '@aeternity/aepp-sdk/es/tx/builder'
-    import * as TxHelper from '@aeternity/aepp-sdk/es/tx/builder/helpers'
-
 
 
     const NODE_URL = 'https://sdk-mainnet.aepps.com';
@@ -76,7 +73,7 @@
             return {
                 tx: '',
                 data: false,
-                results: {},
+                results: null,
                 error: undefined,
                 loading: false,
                 invalidTx: false,
@@ -95,43 +92,62 @@
             clear() {
                 this.invalidTx = false;
                 this.success = false;
-                this.results = {};
-                this.error = {};
-                this.warning = {};
+                this.results = null;
             },
             onError() {
                 this.invalidTx = true;
                 this.loading = false;
-                //console.error(e);
             },
             clearInput() {
                 this.tx = '';
             },
-            unpackTx () {
-                const { tx } = TxBuilder.unpackTx(this.tx.trim());
-                this.results.txObject = tx;
+            mapValidationAndTx(data) {
+                const signatureError = data.validation.find(v => v['txKey'] === 'signature');
+                if (data.signatures && data.signatures[0])
+                 data.signature = { ...data.signatures[0], error: signatureError && signatureError.msg};
 
-                if (tx.signatures) {
-                    this.results.signature = TxHelper.encode(tx.signatures[0], 'sg');
-                    this.results.txObject = tx.encodedTx.tx;
-                }
+                return {
+                    ...data,
+                    txObject: Object
+                        .entries(data.tx)
+                        .reduce(
+                            (acc, [key, value]) => {
+                                const validation =
+                                    data.validation
+                                        .reduce(
+                                            (acc, {txKey, type, msg}) => {
+                                                if (key === txKey) acc[type] = msg;
+                                                return acc;
+                                            },
+                                            {}
+                                        );
+
+                                acc[key] = {value, ...validation, title: key};
+                                return acc
+                            },
+                            {}
+                        )
+                };
             },
             validate() {
                 this.clear();
                 this.loading = true;
-                try {
-                    this.results.tx = this.tx;
+                const base64regex = /^([0-9a-zA-Z+/]{4})*(([0-9a-zA-Z+/]{2}==)|([0-9a-zA-Z+/]{3}=))?$/;
 
-                    // TODO remove that extracting when upgrade to sdk 1.3.3 (unpack and verify will handle it)
-                    this.unpackTx();
+                try {
+                    if (this.tx.trim().split('_')[0] !== 'tx' || !base64regex.test(this.tx.trim().slice(3)))
+                        throw new Error('Invalid Transaction Hash');
 
                     this.txValidator.unpackAndVerify(this.tx.trim())
-                        .then(({ error, warning }) => {
+                        .then((data) => {
                             this.loading = false;
+
+                            if (!Object.keys(data.validation).length)
+                                this.success = true;
+                            else
+                                this.results = { txHash: this.tx, ...this.mapValidationAndTx(data)};
+
                             this.clearInput();
-                            this.error = error;
-                            this.warning = warning;
-                            this.success = Object.keys(this.error).length === 0 && Object.keys(this.warning).length === 0;
                         })
                 } catch (e) {
                     this.onError(e)
@@ -144,6 +160,7 @@
 <style lang="scss">
     @import "~@aeternity/aepp-components-3/src/styles/variables/colors";
     @import "~@aeternity/aepp-components-3/src/styles/placeholders/typography";
+
     html {
         @extend %face-sans-base;
         font-size: 18px;
@@ -153,17 +170,20 @@
         box-sizing: border-box;
         caret-color: $color-primary;
     }
+
     *, *:before, *:after {
         box-sizing: inherit;
     }
 
     body {
         color: #001833;
-        margin:0;
+        margin: 0;
     }
+
     [v-cloak] {
-        display:none
+        display: none
     }
+
     ul, li {
         list-style: none;
     }
@@ -210,12 +230,14 @@
         display: flex;
         flex-direction: column;
         align-items: center;
+
         &__label {
             @extend %face-uppercase-xs;
             color: $color-neutral-negative-1;
             margin: 1.5rem 0;
             text-align: center;
         }
+
         &__input {
             width: 100%;
             display: block;
@@ -231,16 +253,19 @@
             overflow: hidden;
             word-break: break-all;
             cursor: url('assets/goggles_cursor.png'), auto;
+
             &:focus {
                 outline: none;
                 border-radius: .5rem;
                 border: 2px solid $color-neutral-positive-1;
             }
+
             &::placeholder {
                 //font-size: .8rem;
                 opacity: .5;
             }
         }
+
         &__btn {
             padding: .5rem;
             border-radius: 1.2rem;
@@ -318,15 +343,18 @@
         align-items: center;
         flex-direction: column;
         font-size: .8rem;
+
         &-container {
             display: flex;
             margin: .3rem 0;
+
             & a {
                 //font-size: .8rem;
                 color: $color-neutral-minimum;
                 display: inline-block;
                 text-decoration: none;
                 text-align: center;
+
                 &:first-child {
                     margin-right: 1rem;
                 }
