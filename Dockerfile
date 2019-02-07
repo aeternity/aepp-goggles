@@ -1,8 +1,11 @@
 FROM node:10.15.1-alpine as aepp-goggles-build
+ARG NODE_URL
+ARG NODE_INTERNAL_URL
 WORKDIR /app
 RUN apk add make gcc g++ python
 COPY  . .
-RUN npm install && npm run build
+RUN npm install
+RUN NODE_URL=$NODE_URL NODE_INTERNAL_URL=$NODE_INTERNAL_URL npm run build
 
 FROM nginx:1.13.7-alpine
 
