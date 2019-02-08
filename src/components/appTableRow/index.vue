@@ -35,8 +35,6 @@ export default {
   }
 
   .app-table-row.extend {
-    margin-top: .6rem;
-    padding-top: .6rem;
     margin-bottom: 0;
     border-left: none;
     //border-top: 2px solid $color-neutral-positive-2;
