@@ -56,11 +56,6 @@
 
     import TxValidator from '@aeternity/aepp-sdk/es/tx/validator'
 
-
-    const NODE_URL = 'https://sdk-mainnet.aepps.com';
-    const NODE_INTERNAL_URL = 'https://sdk-mainnet.aepps.com';
-    const NETWORK_ID = 'ae_mainnet';
-
     export default {
         name: 'app',
         components: {
@@ -83,9 +78,9 @@
         },
         async created() {
             this.txValidator = await TxValidator({
-                url: NODE_URL,
-                internalUrl: NODE_INTERNAL_URL,
-                networkId: NETWORK_ID
+                url: process.env.NODE_URL,
+                internalUrl: process.env.NODE_INTERNAL_URL,
+                forceCompatibility: true,
             });
         },
         methods: {
