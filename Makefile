@@ -26,7 +26,7 @@ build:
 
 docker-build: 
 	@echo build image
-	docker build --build-arg NODE_URL='$(NODE_URL)' --build-arg NODE_INTERNAL_URL='$(NODE_URL)'  -t $(DOCKER_IMAGE) -f Dockerfile .
+	docker build --build-arg VUE_APP_NODE_URL='$(NODE_URL)' --build-arg VUE_APP_NODE_INTERNAL_URL='$(NODE_URL)'  -t $(DOCKER_IMAGE) -f Dockerfile .
 	@echo done
 
 docker-push:
