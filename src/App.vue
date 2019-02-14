@@ -78,8 +78,8 @@
         },
         async created() {
             this.txValidator = await TxValidator({
-                url: process.env.NODE_URL,
-                internalUrl: process.env.NODE_INTERNAL_URL,
+                url: process.env.VUE_APP_NODE_URL,
+                internalUrl: process.env.VUE_APP_NODE_INTERNAL_URL,
                 forceCompatibility: true,
             });
         },
