@@ -6,7 +6,7 @@ DOCKER_REGISTRY = 166568770115.dkr.ecr.eu-central-1.amazonaws.com/aeternity
 DOCKER_IMAGE = aepp-goggles
 DOCKER_TAG = $(shell git describe --always --tags)
 # epoch url used at build time
-NODE_URL=//sdk-unstable.aepps.com
+NODE_URL=//sdk-mainnet.aepps.com
 # k8s
 K8S_NAMESPACE=mainnet
 
