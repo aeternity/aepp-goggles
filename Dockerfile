@@ -5,7 +5,7 @@ WORKDIR /app
 RUN apk add make gcc g++ python git
 COPY  . .
 RUN npm install
-RUN NODE_URL=$VUE_APP_NODE_URL NODE_INTERNAL_URL=$VUE_APP_NODE_INTERNAL_URL npm run build
+RUN VUE_APP_NODE_URL=$VUE_APP_NODE_URL VUE_APP_NODE_INTERNAL_URL=$VUE_APP_NODE_INTERNAL_URL npm run build
 
 FROM nginx:1.13.7-alpine
 
