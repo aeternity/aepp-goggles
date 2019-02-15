@@ -10,7 +10,7 @@
   "dependencies": {
     "@aeternity/aepp-components": "2.0.13",
     "@aeternity/aepp-components-3": "^3.0.0-alpha.8",
-    "@aeternity/aepp-sdk": "2.0.0",
+    "@aeternity/aepp-sdk": "2.1.1-0.1.0-next",
     "node-sass": "^4.11.0",
     "sass-loader": "^7.1.0",
     "vue": "^2.5.21"
