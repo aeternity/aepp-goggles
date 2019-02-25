@@ -177,6 +177,7 @@
     body {
         color: #001833;
         margin: 0;
+        cursor: url('assets/goggles_cursor.png'), auto;
     }
 
     [v-cloak] {
@@ -243,12 +244,12 @@
             border: 2px solid $color-neutral-positive-2;
             background-color: $color-neutral-positive-2;
             -webkit-appearance: none;
-            resize: none;
+            // resize: height;
             position: relative;
-            border-radius: .5rem;
+            border-radius: .5rem .5rem 0 .5rem;
             overflow: hidden;
             word-break: break-all;
-            cursor: url('assets/goggles_cursor.png'), auto;
+            cursor: initial;
 
             &:focus {
                 outline: none;
