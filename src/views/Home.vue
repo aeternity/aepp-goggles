@@ -11,7 +11,7 @@
           >💡 paste in transaction below to verify its validity</label>
           <div class="search-field__wrapper" :class="{ 'is-loading' : loading  }">
             <textarea
-              v-model="tx"
+              v-model="txInput"
               id="goggles"
               class="search-field__input"
               @keydown.enter="validate"
@@ -53,6 +53,7 @@ import GogglesLogo from "../components/gogglesLogo";
 import GogglesResults from "../components/gogglesResults";
 import { AeLoader } from "@aeternity/aepp-components";
 import TxValidator from "@aeternity/aepp-sdk/es/tx/validator";
+import router from '../router'
 
 const NODE_URL = "https://sdk-mainnet.aepps.com";
 const NODE_INTERNAL_URL = "https://sdk-mainnet.aepps.com";
@@ -66,9 +67,12 @@ export default {
     AeLoader,
     AeLogo
   },
-  props: [
-    'tx' // this is to use URL/tx/URL_ENCODED_TX_HASH
-  ],
+  props: {
+    tx: {
+      type: String,
+      required: false
+    } // this is to retrieve TX has from "//URL/tx/URL_ENCODED_TX_HASH
+  },
   data: function() {
     return {
       results: null,
@@ -79,6 +83,17 @@ export default {
       success: false,
       txValidator: undefined
     };
+  },
+  computed: {
+    txInput: {
+      get: function() {
+        return this.tx;
+      },
+      set: function(newTxHash) {
+        router.push({ name: 'tx', params: { tx: newTxHash } })
+        this.$emit('update:tx', newTxHash)
+      },
+    }
   },
   async created() {
     this.txValidator = await TxValidator({
