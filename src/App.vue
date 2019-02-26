@@ -41,6 +41,9 @@
                 <a href="https://migrate.aeternity.com/#/legal" target="_blank">
                     Imprint
                 </a>
+                <a href="https://github.com/aeternity/aepp-goggles">
+                    GitHub
+                </a>
             </div>
             <small></small>
         </footer>
@@ -350,7 +353,7 @@
                 text-decoration: none;
                 text-align: center;
 
-                &:first-child {
+                &:not(:last-child) {
                     margin-right: 1rem;
                 }
             }
