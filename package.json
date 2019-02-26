@@ -13,7 +13,8 @@
     "@aeternity/aepp-sdk": "2.3.0",
     "node-sass": "^4.11.0",
     "sass-loader": "^7.1.0",
-    "vue": "^2.5.21"
+    "vue": "^2.5.21",
+    "vue-router": "^3.0.1"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.3.0",
