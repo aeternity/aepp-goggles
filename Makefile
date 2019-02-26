@@ -42,4 +42,4 @@ deploy-k8s:
 	@echo deploy k8s done
 
 debug-start:
-	yarn install && EPOCH_URL='$(EPOCH_URL)' yarn start:dev
+	yarn install && EPOCH_URL='$(EPOCH_URL)' yarn vue-cli-service serve
