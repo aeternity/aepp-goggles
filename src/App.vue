@@ -10,12 +10,11 @@
                     </label>
                     <div class="search-field__wrapper" :class="{ 'is-loading' : loading  }">
                         <textarea
-                                rows="5"
-                                v-model="tx"
-                                id="goggles"
-                                class="search-field__input"
-                                @keydown.enter="validate"
-                                placeholder="tx_+LsLAfhCuEByfG/wPQ1EEuGRHQ/EsiW3ZCWKWKo07eYfr7Gwtsp+J6cW6ra9RzB4Rrh+RTgZH25SfbFBDDNIyA8zJDiCgoEFuHP4cQwBoQErhur1eJn/RBV05rwez1XXy/p0Zlghrxdc1gWlCHrKrqEBHxOjsIvwAUAGYqaLadh194A87EwIZH9u1dhMeJe9UKOJAaEVcvQZvTTrggPogkZQggu4l3lvdSBzaGFsbCBub3QgcGFzcyDwn5ikw1XokQ==">
+                            v-model="tx"
+                            id="goggles"
+                            class="search-field__input"
+                            @keydown.enter="validate"
+                            placeholder="tx_+LsLAfhCuEByfG/wPQ1EEuGRHQ/EsiW3ZCWKWKo07eYfr7Gwtsp+J6cW6ra9RzB4Rrh+RTgZH25SfbFBDDNIyA8zJDiCgoEFuHP4cQwBoQErhur1eJn/RBV05rwez1XXy/p0Zlghrxdc1gWlCHrKrqEBHxOjsIvwAUAGYqaLadh194A87EwIZH9u1dhMeJe9UKOJAaEVcvQZvTTrggPogkZQggu4l3lvdSBzaGFsbCBub3QgcGFzcyDwn5ikw1XokQ==">
                         </textarea>
                         <ae-loader v-if="loading"/>
                     </div>
@@ -50,8 +49,8 @@
 
 <script>
     import AeLogo from './components/aeLogo'
-    import GogglesLogo from "./components/gogglesLogo";
-    import GogglesResults from "./components/gogglesResults";
+    import GogglesLogo from "./components/gogglesLogo"
+    import GogglesResults from "./components/gogglesResults"
     import {AeLoader} from '@aeternity/aepp-components'
 
     import TxValidator from '@aeternity/aepp-sdk/es/tx/validator'
@@ -178,6 +177,7 @@
     body {
         color: #001833;
         margin: 0;
+        cursor: url('assets/goggles_cursor.png'), auto;
     }
 
     [v-cloak] {
@@ -196,6 +196,7 @@
 
     .version-tag {
         color: #fff;
+        background-color: #000;
         font-size: .8rem;
         font-weight: 600;
         line-height: 0;
@@ -203,11 +204,7 @@
         text-transform: uppercase;
         top: 1rem;
         right: 1rem;
-        margin: 0;
-        padding: 0;
-        margin-left: .5rem;
-        color: #fff;
-        background-color: #000;
+        margin: 0 0 0 .5rem;
         padding: .8rem;
         border-radius: .3rem;
     }
@@ -216,13 +213,12 @@
     .container {
         display: flex;
         flex-direction: column;
-        min-height: 90vh;
+        min-height: 85vh;
 
         &__inner {
             width: 90%;
             max-width: 40em;
             margin: auto;
-            padding: 25% 0;
         }
     }
 
@@ -243,16 +239,17 @@
             display: block;
             font-size: .9rem;
             padding: .3rem;
+            min-height: 6rem;
             font-family: "IBM Plex Mono", monospace;
             border: 2px solid $color-neutral-positive-2;
             background-color: $color-neutral-positive-2;
             -webkit-appearance: none;
-            resize: none;
+            // resize: height;
             position: relative;
-            border-radius: .5rem;
+            border-radius: .5rem .5rem 0 .5rem;
             overflow: hidden;
             word-break: break-all;
-            cursor: url('assets/goggles_cursor.png'), auto;
+            cursor: initial;
 
             &:focus {
                 outline: none;
@@ -261,7 +258,6 @@
             }
 
             &::placeholder {
-                //font-size: .8rem;
                 opacity: .5;
             }
         }
@@ -282,7 +278,6 @@
             cursor: url('assets/goggles_cursor_w.png'), pointer;
 
             &.disabled {
-                //opacity: .7;
                 border: 2px solid #E72B6E;
                 background-color: #fff;
                 color: #E72B6E;
