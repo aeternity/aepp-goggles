@@ -144,11 +144,12 @@
                         .then((data) => {
                             this.loading = false;
 
-                            if (!Object.keys(data.validation).length)
+                            if (!Object.keys(data.validation).length) {
                                 this.success = true;
-                            else
                                 this.results = { txHash: this.tx, ...this.mapValidationAndTx(data)};
-
+                            } else {
+                                this.results = { txHash: this.tx, ...this.mapValidationAndTx(data)};
+                            }
                             this.clearInput();
                         })
                 } catch (e) {
