@@ -6,9 +6,9 @@ DOCKER_REGISTRY = 166568770115.dkr.ecr.eu-central-1.amazonaws.com/aeternity
 DOCKER_IMAGE = aepp-goggles
 DOCKER_TAG = $(shell git describe --always --tags)
 # epoch url used at build time
-EPOCH_URL='//sdk-testnet.aepps.com'
+NODE_URL='//sdk-testnet.aepps.com'
 # k8s
-K8S_NAMESPACE=mainnet
+K8S_NAMESPACE=testnet
 
 .PHONY: list
 list:
@@ -21,7 +21,7 @@ clean:
 
 build:
 	@echo build release
-	yarn install && EPOCH_URL='$(EPOCH_URL)' yarn run build
+	yarn install && NODE_URL='$(NODE_URL)' yarn run build
 	@echo done
 
 docker-build: build
@@ -42,4 +42,4 @@ deploy-k8s:
 	@echo deploy k8s done
 
 debug-start:
-	yarn install && EPOCH_URL='$(EPOCH_URL)' yarn start:dev
+	yarn install && NODE_URL='$(NODE_URL)' yarn start:dev
