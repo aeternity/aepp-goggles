@@ -8,7 +8,7 @@ DOCKER_TAG = $(shell git describe --always --tags)
 # epoch url used at build time
 NODE_URL='//sdk-testnet.aepps.com'
 # k8s
-K8S_NAMESPACE=testnet
+K8S_NAMESPACE=mainnet
 
 .PHONY: list
 list:
